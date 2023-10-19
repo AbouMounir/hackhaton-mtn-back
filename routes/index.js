@@ -52,6 +52,10 @@ router.get(('/'), (req, res) => {
     User.find({}).then(item => res.send(item))
 });
 
+router.get(('/users'), (req, res) => {
+    User.find({}).then(item => res.send(item))
+});
+
 // Communiquer avec l api mtn en sandbox
 router.post('/users', async (req, res) => {
     try {
