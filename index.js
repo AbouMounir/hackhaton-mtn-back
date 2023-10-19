@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import express from "express";
 import connectDb from "./database/db.js";
+import router from "./routes/index.js";
 
 const app = express();
 
@@ -9,9 +10,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 
 //app.use("/api/v1", routerUtilisateurs);
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+
+
+
 
 app.listen(3000, (err) => {
     if (err) {
@@ -23,4 +24,6 @@ app.listen(3000, (err) => {
 dotenv.config({ path: './config/.env' })
 connectDb();
 
+ 
+app.use('/',router)
 
