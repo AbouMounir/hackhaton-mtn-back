@@ -1,57 +1,97 @@
 import axios from "axios";
 import express from "express";
+import { v4 as uuidv4 } from 'uuid';
 import User from "../models/User.js";
 
-const access_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSMjU2In0.eyJjbGllbnRJZCI6ImRkYjUxMjVmLWI3NmQtNGUxNi1iMTU3LWVjNDljOTRlNjg5YyIsImV4cGlyZXMiOiIyMDIzLTEwLTE2VDE0OjQ4OjA5LjU3MyIsInNlc3Npb25JZCI6ImYxODY3OGMxLTVjODUtNDAwNy1hMjdjLTIzOTgwZDY3MWFhZiJ9.SMEjYsMALa7_Oylso3SGb4nmfYLAdSHNuo7A3D2ozfI2O1ZbAWsWj5WOonZcTefTZ1kIRj4sxLr--nko9x-4WZhnSLhGTZgdQfBjs3ZFR4Y4EsLb1x_6jAJvpm9ChSNlCParKymdTx2B46AnkGbM2hJbnBy99HF--Wfgn9qA1oN-Q64Wfq_Ihz6G8mAg6sOnaqDvRjK9fnyV3OopOyvn0CFd-Q7aY2pRCgueHcDbShJnvnZTEqvxw6rjP6Gx-DvHl8xLZdTAAkIhcAe4a1O5cTEWFL3sNGac6ZVjFNh0MpUSZ3ugr7dKexM37CVSATXH5d61hKd8cHlul7KMPyL6wA";
+// Generate a random UUID
+const random_uuid = uuidv4();
 
+
+const X_Reference_Id = random_uuid;
+const primaryKey = '780bc30e8b1a477f8c73e4a5f084fe18';
+let access_token = '';
+let apikey = '';
+var encodedToken = '';
+
+// pour les differents routes
 const router = express.Router();
 
-try {
-	const url = 'https://sandbox.momodeveloper.mtn.com/v1_0/apiuser';
-    const data = {
-        "amount": "1000",
-        "currency": "EUR",
-        "externalId": "1234",
-        "payer": {
-            "partyIdType": "MSISDN",
-            "partyId": "22584455859"
-        },
-        "payerMessage": "Loyer octobre",
-        "payeeNote": "Bien reçu"
-    }
 
-    const data1 = {
-        providerCallbackHost: "string"
-    }
+// les url pour l api de mtn
+const url = 'https://sandbox.momodeveloper.mtn.com/v1_0/apiuser';
+const url_api = `https://sandbox.momodeveloper.mtn.com/v1_0/apiuser/${X_Reference_Id}/apikey`
+const url_token = 'https://sandbox.momodeveloper.mtn.com/collection/token/';
+const url_pay = 'https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay'
 
-	// Specifying headers in the config object
-	const config = {
-        'Ocp-Apim-Subscription-Key': '780bc30e8b1a477f8c73e4a5f084fe18',
-        'X-Reference-Id': '235f96bf-cbeb-4b9f-92fb-1bad639b4953',
-    }
-
-    router.post('/api_hackathon',async (req, res) => {
-        const response = await axios.post(url,data1, config);
-    })
-
-	console.log(response.data);
-} catch (error) {
-	console.error(error);
+const data_pay = {
+    "amount": "1000",
+    "currency": "EUR",
+    "externalId": "1234",
+    "payer": {
+        "partyIdType": "MSISDN",
+        "partyId": "22584455859"
+    },
+    "payerMessage": "Loyer octobre",
+    "payeeNote": "Bien reçu"
 }
+
+const data = {
+    providerCallbackHost: "string"
+};
+
+const config = {
+    headers: {
+        'Ocp-Apim-Subscription-Key': primaryKey,
+    },
+    params: {
+        'X-Reference-Id': random_uuid
+    }
+};
 
 router.get(('/'), (req, res) => {
     User.find({}).then(item => res.send(item))
 });
 
-
-router.post('/users', (req, res) => {
+// Communiquer avec l api mtn en sandbox
+router.post('/users', async (req, res) => {
     try {
-        const user = new User({
+        await axios.post(url,data, {
+            headers: {
+            'Ocp-Apim-Subscription-Key': primaryKey,
+            'X-Reference-Id': random_uuid
+        }},)
+            .then(res => console.log(res.status));
+
+        await axios.post(url_api, {}, config)
+            .then(res => apikey = res.data);
+
+        const token = `${X_Reference_Id}:${apikey['apiKey']}`;
+        encodedToken = Buffer.from(token).toString('base64');
+
+        await axios.post(url_token, {}, {
+            headers: {
+                'Ocp-Apim-Subscription-Key': primaryKey,
+                'Authorization': `Basic ${encodedToken}`
+            }
+        })
+            .then(res => access_token = res.data['access_token']);
+
+        await axios.post(url_pay, data_pay, {
+            headers: {
+                'X-Reference-Id': random_uuid,
+                'X-Target-Environment': 'sandbox',
+                'Ocp-Apim-Subscription-Key': primaryKey,
+                'Authorization': `Bearer ${access_token}`
+            }
+        })
+            .then(res => console.log(res.status));
+
+        /* const user = new User({
             userName: req.body.userName,
             code: req.body.code,
             numberName: req.body.numberName,
         })
-        user.save()
+        user.save() */
     } catch (error) {
         console.log(error);
     }
@@ -60,7 +100,7 @@ router.post('/users', (req, res) => {
 export default router;
 
 
-/* 
+/*
 
 router.post(('/api_hackathon/users/add'), (req, res) => {
     const user = new User({

@@ -9,11 +9,6 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 
-//app.use("/api/v1", routerUtilisateurs);
-
-
-
-
 app.listen(3000, (err) => {
     if (err) {
         console.log(err);
@@ -24,6 +19,6 @@ app.listen(3000, (err) => {
 dotenv.config({ path: './config/.env' })
 connectDb();
 
- 
-app.use('/',router)
+
+app.use('/', router)
 
