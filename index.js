@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import express from "express";
 import connectDb from "./database/db.js";
+import routerUser from "./routes/User.js";
 import router from "./routes/index.js";
 
 const app = express();
@@ -21,4 +22,5 @@ connectDb();
 
 
 app.use('/', router)
+app.use('/users/',routerUser)
 

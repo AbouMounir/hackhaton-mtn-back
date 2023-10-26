@@ -1,7 +1,6 @@
 import axios from "axios";
 import express from "express";
 import { v4 as uuidv4 } from 'uuid';
-import User from "../models/User.js";
 
 // Generate a random UUID
 const random_uuid = uuidv4();
@@ -48,16 +47,8 @@ const config = {
     }
 };
 
-router.get(('/'), (req, res) => {
-    User.find({}).then(item => res.send(item))
-});
-
-router.get(('/users'), (req, res) => {
-    User.find({}).then(item => res.send(item))
-});
-
 // Communiquer avec l api mtn en sandbox
-router.post('/users', async (req, res) => {
+router.post('/api', async (req, res) => {
     try {
         await axios.post(url,data, {
             headers: {
@@ -89,13 +80,6 @@ router.post('/users', async (req, res) => {
             }
         })
             .then(res => console.log(res.status));
-
-        /* const user = new User({
-            userName: req.body.userName,
-            code: req.body.code,
-            numberName: req.body.numberName,
-        })
-        user.save() */
     } catch (error) {
         console.log(error);
     }
@@ -104,32 +88,3 @@ router.post('/users', async (req, res) => {
 export default router;
 
 
-/*
-
-router.post(('/api_hackathon/users/add'), (req, res) => {
-    const user = new User({
-        FirstName: req.body.FirstName,
-        LastName: req.body.LastName,
-        email: req.body.email,
-        age: req.body.age
-    })
-    user.save()
-});
-
-
-router.put(('/api_hackathon/users/edit/:id'), async (req, res, next) => {
-    const user = {
-        FirstName: req.body.FirstName,
-        LastName: req.body.LastName,
-        email: req.body.email,
-        age: req.body.age
-    }
-    const nn = await User.findOneAndUpdate({ _id: req.params.id }, { $set: user })
-    await nn.save();
-    next();
-});
-router.delete(('/api_hackathon/users/delete/:id'), async (req, res, next) => {
-    const nnn = await User.findOneAndDelete({ _id: req.params.id })
-    await nnn.save();
-    next();
-}) */
