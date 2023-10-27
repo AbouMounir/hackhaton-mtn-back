@@ -1,3 +1,5 @@
+//npm install -g firebase-tools
+
 import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import express from "express";
@@ -6,6 +8,7 @@ import routerUser from "./routes/User.js";
 import router from "./routes/index.js";
 
 const app = express();
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
@@ -22,5 +25,5 @@ connectDb();
 
 
 app.use('/', router)
-app.use('/users/',routerUser)
+app.use('/users/', routerUser)
 

@@ -1,14 +1,15 @@
+import { signInWithPhoneNumber } from 'firebase/auth';
 import TextFlow from 'textflow.js';
+import auth from '../firebase.config.js';
 import User from '../models/User.js';
 
-TextFlow.useKey("Tm6sFLbORJ6yOuVgA7NkwS9ErSmBeAmDjR476hML9Q49vxB9k938Yyei7J9zdkc9");
 
 const getUsers = ((req, res) => {
     User.find({}).then(item => res.send(item))
 })
 
 const getUser = (async (req, res) => {
-    await User.findOne({ _id: req.params.id }).then(item => res.send(item));
+    await User.findOne({ userNumber: req.body.userNumber}).then(item => res.send(item));
 })
 
 const createUser = (async (req, res) => {
@@ -16,16 +17,42 @@ const createUser = (async (req, res) => {
         userFirstName: req.body.FirstName,
         userLastName: req.body.LastName,
         userNumber: req.body.number,
-        codeSecurite: req.body.code
+        codeParental: req.body.code
     })
     user.save()
-    
-    const verificationOptions ={
-        service_name: 'MTN hackathon app',
-        seconds: 600,
+})
+
+const addPasswordUser = (async (req, res) => {
+    try {
+        const user = await User.findOneAndUpdate({ _id: req.params.userID }, { codeSecurite: req.body.codeSecurite }, { $currentDate: { lastModified: true } });
+        await user.save()
+        console.log(req.body.codeSecurite);
+    } catch (error) {
+        console.log(error);
     }
-    const result = await TextFlow.sendVerificationSMS(req.body.number, verificationOptions);
-    return res.status(result.status).json(result.message)
+})
+
+const confirmPasswordUser = (async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.params.userID });
+        if (user.codeSecurite !== req.body.codeSecurite) {
+            console.log('mot de passe non identique');
+        }
+        const appVerifier = window.recaptchaVerifier;
+
+        signInWithPhoneNumber(auth, user.userNumber, appVerifier)
+            .then((confirmationResult) => {
+                // SMS sent. Prompt user to type the code from the message, then sign the
+                // user in with confirmationResult.confirm(code).
+                window.confirmationResult = confirmationResult;
+                // ...
+            }).catch((error) => {
+                console.log(error);
+            });
+        console.log('identique');
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 const updateUser = (async (req, res) => {
@@ -46,55 +73,18 @@ const deleteUser = (async (req, res) => {
     next();
 })
 
-const verificationCode = ( async (req,res) => {
+const verificationCode = (async (req, res) => {
 
-    const phone_number = await User.findOne({_id: req.params.id})
-    const {code} = req.body;
+    const phone_number = await User.findOne({ _id: req.params.id })
+    const { code } = req.body;
     let result = await TextFlow.verifyCode(phone_number, code);
-    if(result.valid)
-    {
+    if (result.valid) {
         // your server logic
         return res.status(200).json(result.message)
     }
     return res.status(result.status).json(result.message)
-        
+
 })
 
-export { createUser, deleteUser, getUser, getUsers, updateUser, verificationCode };
+export { addPasswordUser, confirmPasswordUser, createUser, deleteUser, getUser, getUsers, updateUser, verificationCode };
 
-
-/*
-router.get(('/'), (req, res) => {
-    User.find({}).then(item => res.send(item))
-});
-
-router.get(('/users'), (req, res) => {
-    User.find({}).then(item => res.send(item))
-});
-router.post(('/api_hackathon/users/add'), (req, res) => {
-    const user = new User({
-        FirstName: req.body.FirstName,
-        LastName: req.body.LastName,
-        email: req.body.email,
-        age: req.body.age
-    })
-    user.save()
-});
-
-
-router.put(('/api_hackathon/users/edit/:id'), async (req, res, next) => {
-    const user = {
-        FirstName: req.body.FirstName,
-        LastName: req.body.LastName,
-        email: req.body.email,
-        age: req.body.age
-    }
-    const nn = await User.findOneAndUpdate({ _id: req.params.id }, { $set: user })
-    await nn.save();
-    next();
-});
-router.delete(('/api_hackathon/users/delete/:id'), async (req, res, next) => {
-    const nnn = await User.findOneAndDelete({ _id: req.params.id })
-    await nnn.save();
-    next();
-}) */

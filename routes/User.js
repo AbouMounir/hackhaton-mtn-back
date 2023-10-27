@@ -2,21 +2,23 @@ import express from 'express';
 const routerUser = express.Router()
 
 import {
+    addPasswordUser,
+    confirmPasswordUser,
     createUser,
     deleteUser,
     getUser,
     getUsers,
-    updateUser,
-    verificationCode
+    updateUser
 } from '../controllers/User.js';
 
 routerUser.get('/', getUsers)
 
-routerUser.get('/:userID', getUser)
+routerUser.get('/:userNumber', getUser)
 
 routerUser.post('/', createUser)
 
-routerUser.post('/:userID',verificationCode)
+routerUser.post('/add/:userID',addPasswordUser)
+routerUser.post('/confirm/:userID',confirmPasswordUser)
 
 routerUser.put('/:userID', updateUser)
 
