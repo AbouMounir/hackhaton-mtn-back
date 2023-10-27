@@ -9,7 +9,7 @@ const getUsers = ((req, res) => {
 })
 
 const getUser = (async (req, res) => {
-    await User.findOne({ userNumber: req.body.userNumber}).then(item => res.send(item));
+    await User.findOne({ userNumber: req.params.userNumber}).then(item => res.send(item));
 })
 
 const createUser = (async (req, res) => {
