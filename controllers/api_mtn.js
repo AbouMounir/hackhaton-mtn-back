@@ -1,5 +1,4 @@
 import axios from "axios";
-import express from "express";
 import { v4 as uuidv4 } from 'uuid';
 
 // Generate a random UUID
@@ -12,27 +11,12 @@ let access_token = '';
 let apikey = '';
 var encodedToken = '';
 
-// pour les differents routes
-const router = express.Router();
-
-
 // les url pour l api de mtn
 const url = 'https://sandbox.momodeveloper.mtn.com/v1_0/apiuser';
 const url_api = `https://sandbox.momodeveloper.mtn.com/v1_0/apiuser/${X_Reference_Id}/apikey`
 const url_token = 'https://sandbox.momodeveloper.mtn.com/collection/token/';
 const url_pay = 'https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay'
 
-const data_pay = {
-    "amount": "1000",
-    "currency": "EUR",
-    "externalId": "1234",
-    "payer": {
-        "partyIdType": "MSISDN",
-        "partyId": "22584455859"
-    },
-    "payerMessage": "Loyer octobre",
-    "payeeNote": "Bien reçu"
-}
 
 const data = {
     providerCallbackHost: "string"
@@ -48,7 +32,19 @@ const config = {
 };
 
 // Communiquer avec l api mtn en sandbox
-router.post('/api', async (req, res) => {
+const apiMTNpay = ( async (req, res,montant,number) => {
+
+    const data_pay = {
+        "amount": montant,
+        "currency": "EUR",
+        "externalId": "1234",
+        "payer": {
+            "partyIdType": "MSISDN",
+            "partyId": number
+        },
+        "payerMessage": "Loyer octobre",
+        "payeeNote": "Bien reçu"
+    }
     try {
         await axios.post(url,data, {
             headers: {
@@ -85,6 +81,6 @@ router.post('/api', async (req, res) => {
     }
 })
 
-export default router;
+export default apiMTNpay;
 
 
