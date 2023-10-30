@@ -109,7 +109,7 @@ The REST API to the example app is described below.
     Content-Type: application/json
     Content-Length: 74
 
-    [{"id":1,"name":"Foo","status":"new"},{"id":2,"name":"Bar","status":null}]
+    [{"_id":{"$oid":"653497024801ad8ea644974d"},"userFirstName":"Abou Mounir","userLastName":"An-nawiwi","codeSecurite":"1234","userNumber":"+2250140729371","__v":{"$numberInt":"0"}},{"_id":{"$oid":"653660371a785937f810d88a"},"userFirstName":"Abou Mounir","userLastName":"An-nawiwi","userNumber":"+2250140729371","codeSecurite":"2347","__v":{"$numberInt":"0"}},{"_id":{"$oid":"6536ec9ffc801dbc69f7ba5c"},"userFirstName":"Abou Mounir","userLastName":"An-nawiwi","userNumber":"+2250140729371","codeSecurite":"3578","__v":{"$numberInt":"0"}},{"_id":{"$oid":"653b7f65b5eb476b0ebf254b"},"userFirstName":"Odediran","userLastName":"Fatimah","userNumber":"+2250777045033","codeParental":"123456","__v":{"$numberInt":"0"},"codeSecurite":"7523"}]
 
 ## Change a User
 
@@ -122,13 +122,13 @@ The REST API to the example app is described below.
 ### Response
 
     HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:31 GMT
+    Date: Thu, 24 Oct 2023 12:56:00 GMT
     Status: 200 OK
     Connection: close
     Content-Type: application/json
     Content-Length: 40
 
-    {"id":1,"name":"Foo","status":"changed"}
+    {"_id":{"$oid":"653b7f65b5eb476b0ebf254b"},"userFirstName":"Odediran","userLastName":"Fatimah","userNumber":"+2250777045033","__v":{"$numberInt":"0"},"codeSecurite":"7523"}
 
 ## Delete a User
 
@@ -136,7 +136,7 @@ The REST API to the example app is described below.
 
 `DELETE /users/userNumber`
 
-    curl -i -H 'Accept: application/json' -X DELETE http://localhost:3000/users/+2250777045033
+    lien http://localhost:3000/users/+2250777045033
 
 ### Response
 
