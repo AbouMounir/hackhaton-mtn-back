@@ -1,19 +1,26 @@
+import CompteUser from '../models/Compte.js';
 import Transaction from '../models/Transaction.js';
+import apiMTNpay from './api_mtn.js';
 
 const createAndMakeTransaction = (async (req, res) => {
-    const Transaction = await new Transaction({
-        TransactionFirstName: req.body.FirstName,
-        TransactionLastName: req.body.LastName,
-        TransactionNumber: req.body.number,
-        codeSecurite: req.body.code
-    })
-    Transaction.save()
-
-    const compte = await Compte.findOne({userNumber: req.params.userNumber}).then(item => res.send(item));
-    const compteUpdate = await Compte.findOneAndUpdate({userNumber: req.params.userNumber},{total:compte.total - costArticle,depense : compte.depense + costArticle })
-    
-    await compteUpdate.save()
-    apiMTNpay(req,res,req.body.costArticle,req.params.userNumber)
+    try {
+        const transaction = await new Transaction({
+            storeName : req.body.storeName,
+            costArticle : req.body.costArticle,
+        })
+        transaction.save()
+        console.log(transaction);
+        let compte;
+        await CompteUser.findOne({userNumber: req.params.userNumber}).then(item => compte = item);
+        console.log(compte);
+        const compteUpdate = await CompteUser.findOneAndUpdate({userNumber: req.params.userNumber},{total: (parseInt(compte.total) - parseInt(req.body.costArticle)).toString(), depense : (parseInt(compte.depense) + parseInt(req.body.costArticle)).toString()})
+        
+        await compteUpdate.save()
+        console.log(compteUpdate);
+        apiMTNpay(req,res,req.body.costArticle,req.params.userNumber)
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 const getTransactions = ((req, res) => {

@@ -1,13 +1,14 @@
 import Marchand from '../models/Marchand.js';
 
 const createMarchand = (async (req,res) => {
-    const marchand = new Marchand({
-        marchandFirstName : String,
-        marchandLastName : String,
-        storeName: String,
-        marchandContact: String,
-        codeQrMarchand: String
+    const marchand = await new Marchand({
+        marchandFirstName : req.body.marchandFirstName,
+        marchandLastName : req.body.marchandLastName,
+        storeName: req.body.storeName,
+        marchandContact: req.body.marchandContact
     })
+    await marchand.save()
+    res.send(marchand);
 })
 
 const getMarchands = ((req, res) => {
@@ -15,14 +16,32 @@ const getMarchands = ((req, res) => {
 })
 
 const getMarchand = (async (req, res) => {
-    await Marchand.findOne({ storeId: req.params.storeId}).then(item => res.send(item));
+    await Marchand.findOne({ marchandContact: req.params.marchandContact}).then(item => res.send(item));
 })
 
 const deleteMarchand = (async (req, res) => {
-    await Marchand.findOneAndDelete({ _id: req.params.id })
-    await Marchand.save();
+    const marchands = await Marchand.findOneAndDelete({ marchandContact: req.params.marchandContact })
+    await marchands.save();
     next();
 })
 
-export { createMarchand, deleteMarchand, getMarchand, getMarchands };
+const updateMarchand = (async (req, res) => {
+    try {
+        const marchand_update = {
+            marchandFirstName : req.body.marchandFirstName,
+            marchandLastName : req.body.marchandLastName,
+            storeName: req.body.storeName,
+            marchandContact: req.body.marchandContact,
+        }
+        const marchands = await Marchand.findOneAndUpdate({ marchandContact: req.params.marchandContact },{marchand_update},{ $currentDate: { lastModified: true } })
+        await marchands.save();
+        res.send(marchands)
+    } catch (error) {
+        console.log(error);
+    }
+    
+
+})
+
+export { createMarchand, deleteMarchand, getMarchand, getMarchands, updateMarchand };
 

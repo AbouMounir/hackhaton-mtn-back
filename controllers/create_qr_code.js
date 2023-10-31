@@ -9,7 +9,7 @@ let data = {
     "marchandFirstName" : "KROUMA",
     "marchandLastName": "MAMADOU",
     "storeName": "PROPAY",
-    "marchandContact": "225458589658",
+    "marchandContact": "22545858965",
 }
 
 let stJson = JSON.stringify(data)

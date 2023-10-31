@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-const Transaction = mongoose.connect('transactions',{
+const Transaction = mongoose.model('transactions',{
     storeName : String,
-    cost : String,
+    costArticle : String,
     date :  {
         type : Date,
         default: Date.now,

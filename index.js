@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import express from "express";
 import connectDb from "./database/db.js";
+import routerMarchand from "./routes/Marchand.js";
 import routerTransaction from "./routes/Transaction.js";
 import routerUser from "./routes/User.js";
 import router from "./routes/api_mtn.js";
@@ -28,3 +29,4 @@ connectDb();
 app.use('/', router)
 app.use('/users/', routerUser)
 app.use('/apipay', routerTransaction)
+app.use('/marchands',routerMarchand)

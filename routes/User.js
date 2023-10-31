@@ -17,11 +17,11 @@ routerUser.get('/:userNumber', getUser)
 
 routerUser.post('/', createUser)
 
-routerUser.post('/add/:userID',addPasswordUser)
-routerUser.post('/confirm/:userID',confirmPasswordUser)
+routerUser.post('/add/:userNumber',addPasswordUser)
+routerUser.post('/confirm/:userNumber',confirmPasswordUser)
 
-routerUser.put('/:userID', updateUser)
+routerUser.put('/:userNumber', updateUser)
 
-routerUser.delete('/:userID', deleteUser)
+routerUser.delete('/:userNumber', deleteUser)
 
 export default routerUser

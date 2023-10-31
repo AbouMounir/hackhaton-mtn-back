@@ -164,3 +164,130 @@ The REST API to the example app is described below.
     Content-Length: 35
 
     {"status":404,"reason":"Not found"}
+
+
+## Create new Marchand
+
+### Request
+
+`POST /marchands/`
+
+    lien http://localhost:3000/marchands
+
+### Response
+
+    X-Powered-By: Express
+    Content-Security-Policy: default-src 'none'
+    X-Content-Type-Options: nosniff
+    Content-Type: text/html; charset=utf-8
+    Content-Length: 149
+    Date: Tue, 31 Oct 2023 12:13:17 GMT
+    Connection: keep-alive
+    Keep-Alive: timeout=5
+
+    {"marchandFirstName":"Krouma","marchandLastName":"Mamadou","storeName":"Paykids","marchandContact":"22545878963","_id":"6540efe47edb7f990540528b","__v":0}
+
+
+## Create another new Marchand
+
+### Request
+
+`POST /marchands/`
+
+    lien http://localhost:3000/marchands
+
+### Response
+
+    X-Powered-By: Express
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 156
+    ETag: W/"9c-N9lnjDHsnehAE8V3Uz2iFSCccDU"
+    Date: Tue, 31 Oct 2023 12:46:17 GMT
+    Connection: keep-alive
+    Keep-Alive: timeout=5
+
+    {"marchandFirstName":"Sissoko","marchandLastName":"Youssouf","storeName":"propays","marchandContact":"22545678963","_id":"6540f7187edb7f990540528d","__v":0}
+
+## Get all Marchand
+
+### Request
+
+`GET /marchands/`
+
+    lien http://localhost:3000/marchands
+
+### Response
+
+    X-Powered-By: Express
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 517
+    ETag: W/"205-1f9UwVjahx9LJSph1wn95V6fP3c"
+    Date: Tue, 31 Oct 2023 12:48:04 GMT
+    Connection: keep-alive
+    Keep-Alive: timeout=5
+
+    [
+        {"_id":"6540ebb513bead0731e270ac","storeId":"60fa7796-851a-438b-a0c3-9e46b16aab7d","marchandFirstName":"Krouma","marchandLastName":"Mamadou","storeName":"Paykids","marchandContact":"22545878963","__v":0},
+    {"_id":"6540efe47edb7f990540528b","marchandFirstName":"Krouma","marchandLastName":"Mamadou","storeName":"Paykids","marchandContact":"22545858963","__v":0},
+    {"_id":"6540f7187edb7f990540528d","marchandFirstName":"Sissoko","marchandLastName":"Youssouf","storeName":"propays","marchandContact":"22545678763","__v":0}
+    ]
+
+## Get Marchand
+
+### Request
+
+`GET /marchands/userNumber`
+
+    lien http://localhost:3000/marchands/22545858963
+
+### Response
+
+    X-Powered-By: Express
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 154
+    ETag: W/"9a-izINC7XNVFu5MaBZJAllO6+tqmI"
+    Date: Tue, 31 Oct 2023 13:46:50 GMT
+    Connection: keep-alive
+    Keep-Alive: timeout=5
+
+    {"_id":"6540efe47edb7f990540528b","marchandFirstName":"Krouma","marchandLastName":"Mamadou","storeName":"Paykids","marchandContact":"22545878963","__v":0}
+
+## Get  Marchand
+
+### Request
+
+`DELETE /marchands/userNumber`
+
+    lien http://localhost:3000/marchands/22545858963
+
+### Response
+
+    X-Powered-By: Express
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 203
+    ETag: W/"cb-VM3uoUSKef1uyx09LKi6BoQOUUk"
+    Date: Tue, 31 Oct 2023 14:16:27 GMT
+    Connection: keep-alive
+    Keep-Alive: timeout=5
+
+    {"_id":"6540ebb513bead0731e270ac","storeId":"60fa7796-851a-438b-a0c3-9e46b16aab7d","marchandFirstName":"Krouma","marchandLastName":"Mamadou","storeName":"Paykids","marchandContact":"22545878963","__v":0}
+
+## Put Marchand
+
+### Request
+
+`PUT /marchands/userNumber`
+
+    lien http://localhost:3000/marchands/22545858963
+
+### Response
+
+    X-Powered-By: Express
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 156
+    ETag: W/"9c-Ztc9AxH4vL7++HNvLYccA7bbm8Y"
+    Date: Tue, 31 Oct 2023 14:52:41 GMT
+    Connection: keep-alive
+    Keep-Alive: timeout=5
+    
+    {"_id":"6540f7187edb7f990540528d","marchandFirstName":"Sissoko","marchandLastName":"Youssouf","storeName":"doctech","marchandContact":"22555678963","__v":0}
