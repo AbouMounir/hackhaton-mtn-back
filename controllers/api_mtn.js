@@ -46,6 +46,7 @@ const apiMTNpay = ( async (req, res,montant,number) => {
         "payeeNote": "Bien reçu"
     }
     try {
+        let status_requesttopay;
         await axios.post(url,data, {
             headers: {
             'Ocp-Apim-Subscription-Key': primaryKey,
@@ -75,7 +76,8 @@ const apiMTNpay = ( async (req, res,montant,number) => {
                 'Authorization': `Bearer ${access_token}`
             }
         })
-            .then(res => console.log(res.status));
+            .then(res => status_requesttopay = res.status);
+        return status_requesttopay;
     } catch (error) {
         console.log(error);
     }

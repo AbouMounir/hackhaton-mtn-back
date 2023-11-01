@@ -291,3 +291,23 @@ The REST API to the example app is described below.
     Keep-Alive: timeout=5
     
     {"_id":"6540f7187edb7f990540528d","marchandFirstName":"Sissoko","marchandLastName":"Youssouf","storeName":"doctech","marchandContact":"22555678963","__v":0}
+
+## create and make a transaction with the condition of successful connection to the MTN API locally
+
+### Request
+
+`POST /api/userNumber`
+
+    lien http://localhost:3000/apipay/22555678963
+
+### Response
+
+    X-Powered-By: Express
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 255
+    ETag: W/"ff-OLz4EXvA+6NiiOU/JGii5WlhdXo"
+    Date: Wed, 01 Nov 2023 11:59:54 GMT
+    Connection: keep-alive
+    Keep-Alive: timeout=5
+    
+    {"compteUpdate":{"_id":"65423015c0df465266df834c","userNumber":"22555678963","total":"3500","depot":"0","depense":"1500"},"transaction":{"storeName":"paykids","costArticle":"250","_id":"65423db9b68bb41c5c9912a2","date":"2023-11-01T11:59:53.834Z","__v":0}}
