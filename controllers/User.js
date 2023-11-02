@@ -9,7 +9,7 @@ const createUser = (async (req, res) => {
         userNumber: req.body.number,
         codeParental: req.body.code
     })
-    user.save()
+    await user.save()
 })
 
 const getUsers = ((req, res) => {
