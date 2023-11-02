@@ -3,13 +3,18 @@ import auth from '../firebase.config.js';
 import User from '../models/User.js';
 
 const createUser = (async (req, res) => {
-    const user = await new User({
-        userFirstName: req.body.FirstName,
-        userLastName: req.body.LastName,
-        userNumber: req.body.number,
-        codeParental: req.body.code
-    })
-    await user.save()
+    try {
+        const user = await new User({
+            userFirstName: req.body.FirstName,
+            userLastName: req.body.LastName,
+            userNumber: req.body.number,
+            codeParental: req.body.code
+        })
+        await user.save()
+        res.send(user)
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 const getUsers = ((req, res) => {
