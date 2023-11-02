@@ -27,6 +27,6 @@ connectDb();
 
 
 app.use('/', router)
-app.use('/users/', routerUser)
+app.use('/users', routerUser)
 app.use('/apipay', routerTransaction)
 app.use('/marchands',routerMarchand)
