@@ -5,10 +5,10 @@ import User from '../models/User.js';
 const createUser = (async (req, res) => {
     try {
         const user = await new User({
-            userFirstName: req.body.FirstName,
-            userLastName: req.body.LastName,
-            userNumber: req.body.number,
-            codeParental: req.body.code
+            userFirstName: req.body.userFirstName,
+            userLastName: req.body.userLastName,
+            userNumber: req.body.userNumber,
+            codeParental: req.body.codeParental
         })
         await user.save()
         res.send(user)
