@@ -17,7 +17,7 @@ routerUser.get('/:userNumber', getUser)
 
 routerUser.post('/', createUser)
 
-routerUser.post('/add/:userNumber',addPasswordUser)
+routerUser.put('/addpassword/:userNumber',addPasswordUser)
 routerUser.post('/confirm/:userNumber',confirmPasswordUser)
 
 routerUser.put('/:userNumber', updateUser)

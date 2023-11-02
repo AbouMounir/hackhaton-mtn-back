@@ -27,9 +27,9 @@ const getUser = (async (req, res) => {
 
 const addPasswordUser = (async (req, res) => {
     try {
-        const user = await User.findOneAndUpdate({ _id: req.params.userID }, { codeSecurite: req.body.codeSecurite }, { $currentDate: { lastModified: true } });
+        const user = await User.findOneAndUpdate({ userNumber: req.params.userNumber }, { codeSecurite: req.body.codeSecurite }, { $currentDate: { lastModified: true } });
         await user.save()
-        console.log(req.body.codeSecurite);
+        res.send(user)
     } catch (error) {
         console.log(error);
     }
@@ -60,10 +60,10 @@ const confirmPasswordUser = (async (req, res) => {
 
 const updateUser = (async (req, res) => {
     const user = {
-        userFirstName: req.body.FirstName,
-        userLastName: req.body.LastName,
-        userNumber: req.body.number,
-        codeSecurite: req.body.code
+        userFirstName: req.body.userFirstName,
+        userLastName: req.body.userLastName,
+        userNumber: req.body.userNumber,
+        codeParental: req.body.codeParental
     }
     const updateUser = await User.findOneAndUpdate({ _id: req.params.id }, { $set: user })
     await updateUser.save()
