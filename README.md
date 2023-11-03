@@ -34,7 +34,18 @@ The REST API to the example app is described below.
     Connection: keep-alive
     Keep-Alive: timeout=5
 
-    {"_id":{"$oid":"653497024801ad8ea644974d"},"userFirstName":"Abou Mounir","userLastName":"An-nawiwi","codeSecurite":"1234","userNumber":"+2250140729371","__v":{"$numberInt":"0"}}
+    {"_id":{"$oid":"653497024801ad8ea644974d"},"userFirstName":"Abou Mounir","userLastName":"An-nawiwi","codeParent":"1234","userNumber":"+2250140729371","__v":{"$numberInt":"0"}}
+
+## Add password to the User information
+
+### Request
+
+`PUT /users//addpassword/userNumber`
+
+    Lien http://localhost:3000/users/addpassword/2250777045033
+
+### Response
+
 
 ## Get a specific Thing
 

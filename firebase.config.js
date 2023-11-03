@@ -1,8 +1,6 @@
 //npm install firebase-tools
-
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from "firebase/auth";
-
 
 // TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {

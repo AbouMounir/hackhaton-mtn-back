@@ -34,7 +34,7 @@ const getTransactions = ((req, res) => {
 })
 
 const getTransaction = (async (req, res) => {
-    await Transaction.findOne({ _id: req.params.id }).then(item => res.send(item));
+    await Transaction.findOne({ userNumber: req.params.userNumber }).then(item => res.send(item));
 })
 
 export { createAndMakeTransaction, getTransaction, getTransactions };

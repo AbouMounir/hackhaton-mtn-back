@@ -1,5 +1,3 @@
-import { signInWithPhoneNumber } from 'firebase/auth';
-import auth from '../firebase.config.js';
 import User from '../models/User.js';
 
 const createUser = (async (req, res) => {
@@ -22,7 +20,7 @@ const getUsers = ((req, res) => {
 })
 
 const getUser = (async (req, res) => {
-    await User.findOne({ userNumber: req.params.userNumber}).then(item => res.send(item));
+    await User.findOne({ userNumber: req.params.userNumber }).then(item => res.send(item));
 })
 
 const addPasswordUser = (async (req, res) => {
@@ -37,11 +35,23 @@ const addPasswordUser = (async (req, res) => {
 
 const confirmPasswordUser = (async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.params.userID });
-        if (user.codeSecurite !== req.body.codeSecurite) {
-            console.log('mot de passe non identique');
-        }
-        const appVerifier = window.recaptchaVerifier;
+        await User.findOne({ userNumber: req.params.userNumber }).then(
+            item => {
+                if (item == null) {
+                    res.status(500).json({ message: 'mot de passe et/ou email incorrect' })
+
+                } else {
+                    if (item.codeSecurite !== req.body.codeSecurite) {
+                        res.status(400).json({ message: 'mot de passe et/ou email incorrect' })
+                        res.send(true);
+                    } else {
+                        res.status(201).json({
+                            userNumber: item.userNumber,
+                            })
+                        }
+                    }
+                })
+        /* const appVerifier = window.recaptchaVerifier;
 
         signInWithPhoneNumber(auth, user.userNumber, appVerifier)
             .then((confirmationResult) => {
@@ -52,11 +62,11 @@ const confirmPasswordUser = (async (req, res) => {
             }).catch((error) => {
                 console.log(error);
             });
-        console.log('identique');
+        console.log('identique'); */
     } catch (error) {
-        console.log(error);
-    }
-})
+    console.log(error);
+}})
+
 
 const updateUser = (async (req, res) => {
     const user = {
@@ -65,13 +75,13 @@ const updateUser = (async (req, res) => {
         userNumber: req.body.userNumber,
         codeParental: req.body.codeParental
     }
-    const updateUser = await User.findOneAndUpdate({ _id: req.params.id }, { $set: user })
+    const updateUser = await User.findOneAndUpdate({ userNumber: req.params.userNumber }, { $set: user })
     await updateUser.save()
     next();
 })
 
 const deleteUser = (async (req, res) => {
-    const users = await User.findOneAndDelete({ _id: req.params.id })
+    const users = await User.findOneAndDelete({ userNumber: req.params.userNumber })
     await users.save();
     next();
 })
