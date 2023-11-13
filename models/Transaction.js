@@ -11,3 +11,10 @@ const Transaction = mongoose.model('transactions',{
 
 
 export default Transaction;
+
+/*
+    à qui
+    de qui
+    montant
+    date
+*/

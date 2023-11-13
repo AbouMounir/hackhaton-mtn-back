@@ -1,9 +1,19 @@
 import mongoose from "mongoose";
 
 const User = mongoose.model('users', {
-    userFirstName: String,
-    userLastName: String,
-    userNumber: String,
+    userNumber: {
+        type: String,
+        unique: true,
+        required: [true, "Your user number is required"],
+    },
+    userFirstName: {
+        type: String,
+        required: [true, "Your user firstname is required"],
+    },
+    userLastName: {
+        type: String,
+        required: [true, "Your user lastname is required"],
+    },
     codeParental: String,
     codeSecurite: String
 });
