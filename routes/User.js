@@ -4,11 +4,12 @@ const routerUser = express.Router()
 import {
     addPasswordUser,
     confirmPasswordUser,
+    connexionUser,
     createUser,
     deleteUser,
     getUser,
     getUsers,
-    updateUser
+    updateUserNumber
 } from '../controllers/User.js';
 
 routerUser.get('/', getUsers)
@@ -16,11 +17,12 @@ routerUser.get('/', getUsers)
 routerUser.get('/:userNumber', getUser)
 
 routerUser.post('/', createUser)
+routerUser.get('/connexion/:userNumber',connexionUser)
 
 routerUser.put('/addpassword/:userNumber',addPasswordUser)
 routerUser.post('/confirm/:userNumber',confirmPasswordUser)
 
-routerUser.put('/:userNumber', updateUser)
+routerUser.put('/:_id', updateUserNumber)
 
 routerUser.delete('/:userNumber', deleteUser)
 

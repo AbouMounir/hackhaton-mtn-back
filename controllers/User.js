@@ -28,6 +28,19 @@ const getUser = (async (req, res) => {
     await User.findOne({ userNumber: req.params.userNumber }).then(item => res.send(item));
 })
 
+const connexionUser = (async (req, res) => {
+    await User.findOne({ userNumber: req.params.userNumber }).then(
+        user => {
+            if (user == null) {
+                res.status(500).json({message: 'utilisateur non trouvé'})
+            } else {
+                res.status(201).json({
+                    user
+                })
+            }
+        })
+})
+
 const addPasswordUser = (async (req, res) => {
     try {
         bcrypt.hash(req.body.codeSecurite, 10)
@@ -38,7 +51,7 @@ const addPasswordUser = (async (req, res) => {
                     { $currentDate: { lastModified: true } }
                 );
                 await user.save()
-                    .then(() => res.status(201).json({ message: 'User enregistré !' }))
+                    .then(() => res.status(201).json({ message: 'utilisateur enregistré !' }))
                     .catch(error => res.status(400).json({ error }));
                 console.log(user);
             })
@@ -49,26 +62,22 @@ const addPasswordUser = (async (req, res) => {
 })
 
 const confirmPasswordUser = (async (req, res) => {
-    console.log('rentré');
     try {
         await User.findOne({ userNumber: req.params.userNumber }).then(
             user => {
-                console.log('trouvé')
+                console.log(user)
                 if (user == null) {
-                    console.log('incorrect 1');
-                    res.status(500).json({ message: 'mot de passe et/ou email incorrect' })
+                    res.status(500).json({ message: 'mot de passe incorrect' })
                 } else {
-                    console.log('commence comparaison');
                     bcrypt.compare(req.body.codeSecurite, user.codeSecurite)
                         .then(valid => {
                             console.log('valid');
                             if (valid == false) {
-                                console.log('incorrect 2');
-                                res.status(400).json({ message: 'mot de passe et/ou email incorrect' })
+                                res.status(400).json({ message: 'mot de passe incorrect' })
                             } else {
-                                console.log('password confirmed');
-                                res.status(201).json({
+                                return res.status(201).json({
                                     userNumber: user.userNumber,
+                                    userId : user._id,
                                     message: 'password confirmed'
                                 })
                             }
@@ -82,22 +91,33 @@ const confirmPasswordUser = (async (req, res) => {
 })
 
 
-const updateUser = (async (req, res) => {
-    const user = {
-        userFirstName: req.body.userFirstName,
-        userLastName: req.body.userLastName,
-        userNumber: req.body.userNumber,
-        codeParental: req.body.codeParental
+const updateUserNumber = (async (req, res) => {
+    try {
+        await User.findOne({ _id : req.params._id })
+            .then(
+                user => {
+                    user.userNumber = req.body.userNumber;
+                    user.save();
+                    res.send(user)
+                }
+            )
+            .catch(error => console.log(error))
+    } catch (error) {
+        console.log(error);
     }
-    const updateUser = await User.findOneAndUpdate({ userNumber: req.params.userNumber }, { $set: user })
-    await updateUser.save()
-    next();
 })
 
 const deleteUser = (async (req, res) => {
-    const users = await User.findOneAndDelete({ userNumber: req.params.userNumber })
-    await users.save();
-    next();
+    const user = await User.findOne({ userNumber: req.params.userNumber })
+    await User.deleteOne({_id : user._id.toString()}).then(result => res.send(result))
 })
 
-export { addPasswordUser, confirmPasswordUser, createUser, deleteUser, getUser, getUsers, updateUser };
+export { addPasswordUser, confirmPasswordUser, connexionUser, createUser, deleteUser, getUser, getUsers, updateUserNumber };
+
+
+/* {
+"userNumber":"+2250584455851",
+"userFirstName":"Fatimah",
+"userLastName":"Oum Zeynab",
+"codeParental":"596875"
+} */
