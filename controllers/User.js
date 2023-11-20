@@ -61,6 +61,23 @@ const addPasswordUser = (async (req, res) => {
     }
 })
 
+const addParentNumber = (async (req, res) => {
+    try {
+        const user = await User.findOneAndUpdate(
+            { userNumber: req.params.userNumber },
+            { parentNumber: req.body.parentNumber },
+            { $currentDate: { lastModified: true } }
+        );
+        await user.save()
+            .then(() => res.status(201).json({ message: 'numéro parent ajouté !' }))
+            .catch(error => res.status(400).json({ error }));
+        console.log(user);
+        }
+    catch (error) {
+        console.log(error);
+    }
+})
+
 const confirmPasswordUser = (async (req, res) => {
     try {
         await User.findOne({ userNumber: req.params.userNumber }).then(
@@ -112,7 +129,7 @@ const deleteUser = (async (req, res) => {
     await User.deleteOne({_id : user._id.toString()}).then(result => res.send(result))
 })
 
-export { addPasswordUser, confirmPasswordUser, connexionUser, createUser, deleteUser, getUser, getUsers, updateUserNumber };
+export { addParentNumber, addPasswordUser, confirmPasswordUser, connexionUser, createUser, deleteUser, getUser, getUsers, updateUserNumber };
 
 
 /* {

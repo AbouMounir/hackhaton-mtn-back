@@ -2,6 +2,7 @@ import express from 'express';
 const routerUser = express.Router()
 
 import {
+    addParentNumber,
     addPasswordUser,
     confirmPasswordUser,
     connexionUser,
@@ -20,6 +21,7 @@ routerUser.post('/', createUser)
 routerUser.get('/connexion/:userNumber',connexionUser)
 
 routerUser.put('/addpassword/:userNumber',addPasswordUser)
+routerUser.put('/addparentnumber/:userNumber',addParentNumber)
 routerUser.post('/confirm/:userNumber',confirmPasswordUser)
 
 routerUser.put('/:_id', updateUserNumber)

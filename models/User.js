@@ -14,6 +14,7 @@ const User = mongoose.model('users', {
         type: String,
         required: [true, "Your user lastname is required"],
     },
+    parentNumber: String,
     codeParental: String,
     codeSecurite: String
 });
