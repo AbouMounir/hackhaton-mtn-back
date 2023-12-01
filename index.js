@@ -6,8 +6,9 @@ import express from "express";
 import connectDb from "./database/db.js";
 import routerMarchand from "./routes/Marchand.js";
 import routerTransaction from "./routes/Transaction.js";
-import routerUser from "./routes/User.js";
 import router from "./routes/api_mtn.js";
+import routerChild from "./routes/child/User.js";
+import routerParent from "./routes/parent/User.js";
 
 const app = express();
 
@@ -15,7 +16,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 
-app.listen(3000, (err) => {
+app.listen(4000, (err) => {
     if (err) {
         console.log(err);
     }
@@ -27,6 +28,7 @@ connectDb();
 
 
 app.use('/', router)
-app.use('/users', routerUser)
+app.use('/users/childs', routerChild)
+app.use('/users/parents', routerParent)
 app.use('/apipay', routerTransaction)
 app.use('/marchands',routerMarchand)
