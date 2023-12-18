@@ -128,8 +128,7 @@ const confirmPasswordParent = (async (req, res) => {
                             } else {
                                 return res.status(201).json({
                                     status: "201",
-                                    parentNumber: req.params.parentNumber,
-                                    parentId : parent._id,
+                                    data: parent,
                                     message: 'password confirmed'
                                 })
                             }
