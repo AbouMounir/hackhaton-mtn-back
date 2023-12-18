@@ -3,7 +3,9 @@
 import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import express from "express";
+import multer from "multer";
 import connectDb from "./database/db.js";
+import Image from "./models/Image.js";
 import routerMarchand from "./routes/Marchand.js";
 import routerTransaction from "./routes/Transaction.js";
 import router from "./routes/api_mtn.js";
@@ -12,9 +14,37 @@ import routerParent from "./routes/parent/User.js";
 
 const app = express();
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
+
+app.post('/upload', upload.single('image'), async (req, res) => {
+    try {
+        const imagePath = req.file.path;
+
+        // Enregistrez le chemin d'accès imagePath dans MongoDB
+        const image = new Image({
+            urlImage: imagePath
+        });
+
+        await image.save();
+
+        res.send('Image téléchargée avec succès.');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Erreur lors du téléchargement de l\'image.');
+    }
+});
 
 app.listen(4000, (err) => {
     if (err) {
@@ -31,4 +61,5 @@ app.use('/', router)
 app.use('/users/childs', routerChild)
 app.use('/users/parents', routerParent)
 app.use('/apipay', routerTransaction)
-app.use('/marchands',routerMarchand)
+app.use('/marchands', routerMarchand)
+
