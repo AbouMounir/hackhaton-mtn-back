@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import express from "express";
 import multer from "multer";
+import path from "path";
 import connectDb from "./database/db.js";
 import Image from "./models/Image.js";
 import routerMarchand from "./routes/Marchand.js";
