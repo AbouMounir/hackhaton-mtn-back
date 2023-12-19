@@ -31,7 +31,11 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-app.use(cors());
+app.use(cors({
+    origin: ["https://hackhaton-mtn-back.vercel.app/"],
+    methods: ["POST","GET","PUT","DELETE"],
+    credentials: true
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use('/upload', express.static(path.join(__dirname, 'uploads')));
