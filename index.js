@@ -3,6 +3,7 @@
 import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import express from "express";
+import fs from 'fs';
 import multer from "multer";
 import path, { dirname } from "path";
 import { fileURLToPath } from 'url';
@@ -40,7 +41,10 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 
         // Enregistrez le chemin d'accès imagePath dans MongoDB
         const image = new Image({
-            urlImage: imagePath
+            urlImage: {
+                data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+                contentType: 'image/png'
+            }
         });
 
         await image.save();

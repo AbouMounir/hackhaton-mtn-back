@@ -18,7 +18,7 @@ routerParent.get('/', getParents)
 routerParent.get('/:parentNumber', getParent)
 
 routerParent.post('/', createParent)
-routerParent.get('/connexion/:parentNumber',connexionParent)
+routerParent.post('/connexion/:parentNumber',connexionParent)
 
 routerParent.put('/addpassword/:parentNumber',addPasswordParent)
 routerParent.put('/addchildnumber/:parentNumber',addChildNumber)
