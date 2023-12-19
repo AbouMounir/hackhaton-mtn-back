@@ -1,6 +1,7 @@
 //npm install -g firebase-tools
 
 import bodyParser from "body-parser";
+import cors from "cors";
 import dotenv from 'dotenv';
 import express from "express";
 import fs from 'fs';
@@ -30,7 +31,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use('/upload', express.static(path.join(__dirname, 'uploads')));
