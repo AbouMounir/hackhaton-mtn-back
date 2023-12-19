@@ -4,7 +4,8 @@ import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import express from "express";
 import multer from "multer";
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from 'url';
 import connectDb from "./database/db.js";
 import Image from "./models/Image.js";
 import routerMarchand from "./routes/Marchand.js";
@@ -14,6 +15,9 @@ import routerChild from "./routes/child/User.js";
 import routerParent from "./routes/parent/User.js";
 
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
