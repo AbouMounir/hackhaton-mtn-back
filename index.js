@@ -1,12 +1,12 @@
 //npm install -g firebase-tools
 
-import AWS from 'aws-sdk';
+
 import bodyParser from "body-parser";
 import dotenv from 'dotenv';
 import express from "express";
 import fs from 'fs';
 import multer from "multer";
-import multerS3 from 'multer-s3';
+import os from 'os';
 import path from "path";
 import connectDb from "./database/db.js";
 import Image from "./models/Image.js";
@@ -21,11 +21,20 @@ const app = express();
 /* const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename); */
 
-const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION
+/* const s3 = new S3({
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    },
+
+    region: process.env.AWS_REGION,
+
+    // The transformation for endpoint is not implemented.
+    // Refer to UPGRADING.md on aws-sdk-js-v3 for changes needed.
+    // Please create/upvote feature request on aws-sdk-js-codemod for endpoint.
+    endpoint: `https://s3.${process.env.AWS_REGION}.amazonaws.com`
 });
+
 
 const upload = multer({
     storage: multerS3({
@@ -36,7 +45,7 @@ const upload = multer({
             cb(null, Date.now().toString() + '-' + file.originalname);
         }
     })
-});
+}); */
 
 /* const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -54,6 +63,24 @@ const upload = multer({ storage: storage }); */
     credentials: true
 })); */
 
+const uploadDir = path.join(os.tmpdir(), 'uploads');
+
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
+
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 
@@ -64,10 +91,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 
         // Enregistrez le chemin d'accès imagePath dans MongoDB
         const image = new Image({
-            urlImage: {
-                data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
-                contentType: 'image/png'
-            }
+            urlImage: imagePath
         });
 
         await image.save();
