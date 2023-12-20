@@ -1,13 +1,13 @@
 //npm install -g firebase-tools
 
+import AWS from 'aws-sdk';
 import bodyParser from "body-parser";
-import cors from "cors";
 import dotenv from 'dotenv';
 import express from "express";
 import fs from 'fs';
 import multer from "multer";
-import path, { dirname } from "path";
-import { fileURLToPath } from 'url';
+import multerS3 from 'multer-s3';
+import path from "path";
 import connectDb from "./database/db.js";
 import Image from "./models/Image.js";
 import routerMarchand from "./routes/Marchand.js";
@@ -18,10 +18,27 @@ import routerParent from "./routes/parent/User.js";
 
 const app = express();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+/* const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename); */
 
-const storage = multer.diskStorage({
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
+});
+
+const upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: process.env.S3_BUCKET_NAME,
+        acl: 'public-read',
+        key: function (req, file, cb) {
+            cb(null, Date.now().toString() + '-' + file.originalname);
+        }
+    })
+});
+
+/* const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
     },
@@ -30,16 +47,17 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
-app.use(cors({
+const upload = multer({ storage: storage }); */
+/* app.use(cors({
     origin: ["https://hackhaton-mtn-back.vercel.app/"],
     methods: ["POST","GET","PUT","DELETE"],
     credentials: true
-}));
+})); */
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
-app.use('/upload', express.static(path.join(__dirname, 'uploads')));
 
+/* app.use('/upload', express.static(path.join(__dirname, 'uploads')));*/
 app.post('/upload', upload.single('image'), async (req, res) => {
     try {
         const imagePath = req.file.path;
