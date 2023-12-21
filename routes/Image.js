@@ -9,7 +9,7 @@ import {
 
 routerImage.get('/:userNumber', getImage)
 
-routerImage.post('/:userNumber', postImage)
+routerImage.post('/upload', postImage)
 
 
 export default routerImage

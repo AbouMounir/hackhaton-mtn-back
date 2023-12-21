@@ -1,19 +1,31 @@
+
 import Image from "../models/Image.js";
-import {encode, decode} from 'node-base64-image';
 
-const postImage = (async (req, res) => {
 
-    const url = req.body.urlImage
-    
+const postImage = ( async (req, res) => {
+    console.log(req.path);
     try {
-        const image = await new Image({
-            userNumber: req.body.userNumber,
-            urlImage: req.body.urlImage
-        })
-        await image.save()
-        res.send(image);
+        const imagePath = req.path;
+        
+        // Enregistrez le chemin d'accès imagePath dans MongoDB
+        const image = new Image({
+            urlImage: imagePath
+        });
+        
+
+        await image.save();
+
+        res.send({
+            message: 'Image téléchargée avec succès.',
+            data: req.file.path
+        });
     } catch (error) {
         console.log(error);
+        res.status(500).send(
+            {
+                message :'Erreur lors du téléchargement de l\'image.',
+                data: error
+            });
     }
 })
 

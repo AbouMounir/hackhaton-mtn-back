@@ -21,7 +21,8 @@ const Parent = mongoose.model('parents', {
     childNumber: {
         type: [String],
         default: [],
-        },
+    },
+    urlImage: String,
     codeSecurite: String
 });
 
