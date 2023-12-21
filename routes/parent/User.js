@@ -3,13 +3,11 @@ const routerParent = express.Router()
 
 import {
     addChildNumber,
-    addPasswordParent,
-    confirmPasswordParent,
-    connexionParent,
-    createParent,
     deleteParent,
     getParent,
     getParents,
+    signinParent,
+    signupParent,
     updateParentNumber
 } from '../../controllers/parent/User.js';
 
@@ -17,12 +15,10 @@ routerParent.get('/', getParents)
 
 routerParent.get('/:parentNumber', getParent)
 
-routerParent.post('/', createParent)
-routerParent.post('/connexion/:parentNumber',connexionParent)
+routerParent.post('/signup', signupParent)
+routerParent.post('/signin', signinParent)
 
-routerParent.put('/addpassword/:parentNumber',addPasswordParent)
 routerParent.put('/addchildnumber/:parentNumber',addChildNumber)
-routerParent.post('/confirm/:parentNumber',confirmPasswordParent)
 
 routerParent.put('/:_id', updateParentNumber)
 
