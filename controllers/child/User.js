@@ -66,6 +66,10 @@ const getChilds = ((req, res) => {
     Child.find({}).then(item => res.send(item))
 })
 
+const getCodeParentals = (async (req,res) => {
+    Child.find({ codeParental: req.body.codeParental}).then(item => res.send(item))
+})
+
 const getChild = (async (req, res) => {
     await Child.findOne({ childNumber: req.params.childNumber }).then(
         item => {
@@ -114,5 +118,5 @@ const deleteChild = (async (req, res) => {
     await Child.deleteOne({ _id: child._id.toString() }).then(result => res.send(result))
 })
 
-export { addParentChildNumber, deleteChild, getChild, getChilds, signinChild, signupChild, updateChildNumber };
+export { addParentChildNumber, deleteChild, getChild, getChilds, getCodeParentals, signinChild, signupChild, updateChildNumber };
 

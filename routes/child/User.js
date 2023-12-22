@@ -6,6 +6,7 @@ import {
     deleteChild,
     getChild,
     getChilds,
+    getCodeParentals,
     signinChild,
     signupChild,
     updateChildNumber
@@ -13,6 +14,7 @@ import {
 
 routerChild.get('/', getChilds)
 routerChild.get('/:childNumber', getChild)
+routerChild.get('/codeparental', getCodeParentals)
 routerChild.post('/signup', signupChild)
 routerChild.post('/signin', signinChild)
 routerChild.put('/addparentnumber/:childNumber',addParentChildNumber)

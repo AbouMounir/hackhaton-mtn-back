@@ -34,7 +34,7 @@ const signupParent = (async (req, res) => {
 })
 
 const signinParent = (async (req, res) => {
-    await parent.findOne({ parentNumber: req.body.parentNumber }).then(
+    await Parent.findOne({ parentNumber: req.body.parentNumber }).then(
         parent => {
             if (parent == null) {
                 res.status(500).json({
@@ -65,6 +65,10 @@ const signinParent = (async (req, res) => {
 
 const getParents = ((req, res) => {
     Parent.find({}).then(item => res.send(item))
+})
+
+const getCodeParentals = (async (req,res) => {
+    Child.find({ codeParental: req.body.codeParental}).then(item => res.send(item))
 })
 
 const getParent = (async (req, res) => {
@@ -117,5 +121,5 @@ const deleteParent = (async (req, res) => {
     await Parent.deleteOne({_id : parent._id.toString()}).then(result => res.send(result))
 })
 
-export { addChildNumber, deleteParent, getParent, getParents, signinParent, signupParent, updateParentNumber };
+export { addChildNumber, deleteParent, getCodeParentals, getParent, getParents, signinParent, signupParent, updateParentNumber };
 
