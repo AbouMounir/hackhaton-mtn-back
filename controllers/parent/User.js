@@ -68,7 +68,7 @@ const updateParentPassword = (async (req,res) => {
         await Parent.findOne({ parentNumber : req.params.parentNumber })
             .then(
                 async user => {
-                    const valid = await bcrypt.compare(req.body.parentCurrentPassword, user.parentPassword)
+                    const valid = await bcrypt.compare(req.body.parentCurrentPassword, user.codeSecurite)
                     if (!valid) {
                         return res.status(500).json({ message: 'mot de passe incorrect' })
                     }
@@ -77,7 +77,7 @@ const updateParentPassword = (async (req,res) => {
                     }
                     await bcrypt.hash(req.body.parentnewPassword, 10)
                         .then(hash_new => {
-                            user.parentPassword = hash_new
+                            user.codeSecurite = hash_new
                             user.save();
                             res.send(user)
                         })
@@ -94,7 +94,7 @@ const updateCodeParental = (async (req,res) => {
         await Parent.findOne({ parentNumber : req.params.parentNumber })
             .then(
                 async user => {
-                    const valid = await bcrypt.compare(req.body.parentCurrentCodeParental, user.parentCodeParental)
+                    const valid = await bcrypt.compare(req.body.parentCurrentCodeParental, user.codeParental)
                     if (!valid) {
                         return res.status(500).json({ message: 'mot de passe incorrect' })
                     }
@@ -103,7 +103,7 @@ const updateCodeParental = (async (req,res) => {
                     }
                     await bcrypt.hash(req.body.parentnewCodeParental, 10)
                         .then(hash_new => {
-                            user.parentCodeParental = hash_new
+                            user.codeParental = hash_new
                             user.save();
                             res.send(user)
                         })
