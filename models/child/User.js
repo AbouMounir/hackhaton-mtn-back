@@ -14,7 +14,10 @@ const Child = mongoose.model('Childs', {
         type: String,
         required: [true, "Your Child lastname is required"],
     },
-    urlImage: String,
+    urlImage: {
+        type: String,
+        default: ''
+    },
     parentNumber: String,
     codeParental: String,
     codeSecurite: String

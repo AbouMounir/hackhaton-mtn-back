@@ -25,7 +25,10 @@ const Parent = mongoose.model('parents', {
         type: [String],
         default: [],
     },
-    urlImage: String,
+    urlImage: {
+        type: String,
+        default: ''
+    },
 });
 
 export default Parent ;
