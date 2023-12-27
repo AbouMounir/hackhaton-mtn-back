@@ -9,7 +9,8 @@ import {
     getCodeParentals,
     signinChild,
     signupChild,
-    updateChildNumber
+    updateChildNumber,
+    updateChildPassword
 } from '../../controllers/child/User.js';
 
 routerChild.get('/', getChilds)
@@ -19,6 +20,7 @@ routerChild.post('/signup', signupChild)
 routerChild.post('/signin', signinChild)
 routerChild.put('/addparentnumber/:childNumber',addParentChildNumber)
 routerChild.put('/:_id', updateChildNumber)
+routerChild.put(('/update-password/:childNumber'), updateChildPassword)
 routerChild.delete('/:childNumber', deleteChild)
 
 export default routerChild

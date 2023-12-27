@@ -63,6 +63,58 @@ const signinParent = (async (req, res) => {
         })
 })
 
+const updateParentPassword = (async (req,res) => {
+    try {
+        await Parent.findOne({ parentNumber : req.params.parentNumber })
+            .then(
+                async user => {
+                    const valid = await bcrypt.compare(req.body.parentCurrentPassword, user.parentPassword)
+                    if (!valid) {
+                        return res.status(500).json({ message: 'mot de passe incorrect' })
+                    }
+                    if (req.body.parentnewPassword !== req.body.parentnewPasswordC) {
+                        return res.status(500).json({ message: 'mot de passe non identique' })
+                    }
+                    await bcrypt.hash(req.body.parentnewPassword, 10)
+                        .then(hash_new => {
+                            user.parentPassword = hash_new
+                            user.save();
+                            res.send(user)
+                        })
+                }
+            )
+            .catch(error => console.log(error))
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+const updateCodeParental = (async (req,res) => {
+    try {
+        await Parent.findOne({ parentNumber : req.params.parentNumber })
+            .then(
+                async user => {
+                    const valid = await bcrypt.compare(req.body.parentCurrentCodeParental, user.parentCodeParental)
+                    if (!valid) {
+                        return res.status(500).json({ message: 'mot de passe incorrect' })
+                    }
+                    if (req.body.parentnewCodeParental !== req.body.parentnewCodeParentalC) {
+                        return res.status(500).json({ message: 'mot de passe non identique' })
+                    }
+                    await bcrypt.hash(req.body.parentnewCodeParental, 10)
+                        .then(hash_new => {
+                            user.parentCodeParental = hash_new
+                            user.save();
+                            res.send(user)
+                        })
+                }
+            )
+            .catch(error => console.log(error))
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 const getParents = ((req, res) => {
     Parent.find({}).then(item => res.send(item))
 })
@@ -121,5 +173,5 @@ const deleteParent = (async (req, res) => {
     await Parent.deleteOne({_id : parent._id.toString()}).then(result => res.send(result))
 })
 
-export { addChildNumber, deleteParent, getCodeParentals, getParent, getParents, signinParent, signupParent, updateParentNumber };
+export { addChildNumber, deleteParent, getCodeParentals, getParent, getParents, signinParent, signupParent, updateCodeParental, updateParentNumber, updateParentPassword };
 

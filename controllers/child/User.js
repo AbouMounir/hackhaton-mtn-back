@@ -62,6 +62,32 @@ const signinChild = (async (req, res) => {
         })
 })
 
+const updateChildPassword = (async (req,res) => {
+    try {
+        await Child.findOne({ childNumber : req.params.childNumber })
+            .then(
+                async user => {
+                    const valid = await bcrypt.compare(req.body.childCurrentPassword, user.childPassword)
+                    if (!valid) {
+                        return res.status(500).json({ message: 'mot de passe incorrect' })
+                    }
+                    if (req.body.childnewPassword !== req.body.childnewPasswordC) {
+                        return res.status(500).json({ message: 'entrez le même mot de passe' })
+                    }
+                    await bcrypt.hash(req.body.childnewPassword, 10)
+                        .then(hash_new => {
+                            user.childPassword = hash_new
+                            user.save();
+                            res.send(user)
+                        })
+                }
+            )
+            .catch(error => console.log(error))
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 const getChilds = ((req, res) => {
     Child.find({}).then(item => res.send(item))
 })
@@ -118,5 +144,5 @@ const deleteChild = (async (req, res) => {
     await Child.deleteOne({ _id: child._id.toString() }).then(result => res.send(result))
 })
 
-export { addParentChildNumber, deleteChild, getChild, getChilds, getCodeParentals, signinChild, signupChild, updateChildNumber };
+export { addParentChildNumber, deleteChild, getChild, getChilds, getCodeParentals, signinChild, signupChild, updateChildNumber, updateChildPassword };
 

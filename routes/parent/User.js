@@ -9,7 +9,9 @@ import {
     getParents,
     signinParent,
     signupParent,
-    updateParentNumber
+    updateCodeParental,
+    updateParentNumber,
+    updateParentPassword
 } from '../../controllers/parent/User.js';
 
 routerParent.get('/', getParents)
@@ -20,6 +22,8 @@ routerParent.post('/signup', signupParent)
 routerParent.post('/signin', signinParent)
 
 routerParent.put('/addchildnumber/:parentNumber',addChildNumber)
+routerParent.put(('/update-password/:parentNumber'), updateParentPassword)
+routerParent.put(('/update-codeparental/:parentNumber'), updateCodeParental)
 routerParent.put('/:_id', updateParentNumber)
 
 routerParent.delete('/:parentNumber', deleteParent)

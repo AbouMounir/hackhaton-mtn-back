@@ -14,16 +14,18 @@ const Parent = mongoose.model('parents', {
         type: String,
         required: [true, "Your Parent lastname is required"],
     },
+    codeSecurite: {
+        type: String,
+        required: [true, "Your code is required"]
+    },
     codeParental: {
         type: String,
-        required: [true, "Your parental code is required"]
     },
     childNumber: {
         type: [String],
         default: [],
     },
     urlImage: String,
-    codeSecurite: String
 });
 
 export default Parent ;
