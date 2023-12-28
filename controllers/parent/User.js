@@ -66,7 +66,7 @@ const signinParent = (async (req, res) => {
 
 const confirmParentPassword = (async (req,res) => {
     try {
-        await Parent.findOne({ childNumber : req.params.childNumber })
+        await Parent.findOne({ childNumber : req.body.childNumber })
             .then(
                 async user => {
                     if (!user) {
