@@ -63,6 +63,28 @@ const signinParent = (async (req, res) => {
         })
 })
 
+
+const confirmParentPassword = (async (req,res) => {
+    try {
+        await Parent.findOne({ childNumber : req.params.childNumber })
+            .then(
+                async user => {
+                    if (!user) {
+                        return res.status(500).json({ message: "utilisateur n'existe pas" })
+                    }
+                    const valid = await bcrypt.compare(req.body.childCurrentPassword, user.childPassword)
+                    if (!valid) {
+                        return res.status(500).json({ message: 'mot de passe incorrect' })
+                    }
+                    return res.status(201).json({ message: 'mot de passe correct' })
+                }
+            )
+            .catch(error => console.log(error))
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 const updateParentPassword = (async (req,res) => {
     try {
         await Parent.findOne({ parentNumber : req.params.parentNumber })
@@ -173,5 +195,5 @@ const deleteParent = (async (req, res) => {
     await Parent.deleteOne({_id : parent._id.toString()}).then(result => res.send(result))
 })
 
-export { addChildNumber, deleteParent, getCodeParentals, getParent, getParents, signinParent, signupParent, updateCodeParental, updateParentNumber, updateParentPassword };
+export { addChildNumber, confirmParentPassword, deleteParent, getCodeParentals, getParent, getParents, signinParent, signupParent, updateCodeParental, updateParentNumber, updateParentPassword };
 

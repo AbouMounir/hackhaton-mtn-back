@@ -20,6 +20,7 @@ routerParent.get('/codeparental', getCodeParentals)
 
 routerParent.post('/signup', signupParent)
 routerParent.post('/signin', signinParent)
+routerParent.post('/confirm/password', confirmChildPassword)
 
 routerParent.put('/addchildnumber/:parentNumber',addChildNumber)
 routerParent.put(('/update-password/:parentNumber'), updateParentPassword)

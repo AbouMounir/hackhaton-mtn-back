@@ -62,11 +62,36 @@ const signinChild = (async (req, res) => {
         })
 })
 
+const confirmChildPassword = (async (req,res) => {
+    try {
+        await Child.findOne({ childNumber : req.params.childNumber })
+            .then(
+                async user => {
+                    if (!user) {
+                        return res.status(500).json({ message: "utilisateur n'existe pas" })
+                    }
+                    const valid = await bcrypt.compare(req.body.childCurrentPassword, user.childPassword)
+                    if (!valid) {
+                        return res.status(500).json({ message: 'mot de passe incorrect' })
+                    }
+                    return res.status(201).json({ message: 'mot de passe correct' })
+                }
+            )
+            .catch(error => console.log(error))
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+
 const updateChildPassword = (async (req,res) => {
     try {
         await Child.findOne({ childNumber : req.params.childNumber })
             .then(
                 async user => {
+                    if (!user) {
+                        return res.status(500).json({ message: "utilisateur n'existe pas" })
+                    }
                     const valid = await bcrypt.compare(req.body.childCurrentPassword, user.childPassword)
                     if (!valid) {
                         return res.status(500).json({ message: 'mot de passe incorrect' })
@@ -144,5 +169,5 @@ const deleteChild = (async (req, res) => {
     await Child.deleteOne({ _id: child._id.toString() }).then(result => res.send(result))
 })
 
-export { addParentChildNumber, deleteChild, getChild, getChilds, getCodeParentals, signinChild, signupChild, updateChildNumber, updateChildPassword };
+export { addParentChildNumber, confirmChildPassword, deleteChild, getChild, getChilds, getCodeParentals, signinChild, signupChild, updateChildNumber, updateChildPassword };
 
