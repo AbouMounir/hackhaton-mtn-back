@@ -17,11 +17,11 @@ import {
 
 routerParent.get('/', getParents)
 routerParent.get('/:parentNumber', getParent)
-routerParent.get('/codeparental', getCodeParentals)
 
 routerParent.post('/signup', signupParent)
 routerParent.post('/signin', signinParent)
 routerParent.post('/confirm/password/:parentNumber', confirmParentPassword)
+routerParent.post('/codeparental', getCodeParentals)
 
 routerParent.put('/addchildnumber/:parentNumber',addChildNumber)
 routerParent.put(('/update-password/:parentNumber'), updateParentPassword)
