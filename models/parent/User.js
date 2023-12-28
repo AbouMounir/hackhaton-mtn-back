@@ -20,6 +20,7 @@ const Parent = mongoose.model('parents', {
     },
     codeParental: {
         type: String,
+        unique: [true, "Your code parental must be unique"]
     },
     childNumber: {
         type: [String],

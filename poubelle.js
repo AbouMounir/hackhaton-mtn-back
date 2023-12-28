@@ -70,4 +70,8 @@ const addPasswordChild = (async (req, res) => {
     catch (error) {
         console.log(error);
     }
+    {
+    "parentNumber":"+2250767631044",
+    "codeSecurite": "1234"
+}
 }) */

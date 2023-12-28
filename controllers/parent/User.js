@@ -11,20 +11,26 @@ const signupParent = (async (req, res) => {
         if (req.body.codeSecurite === req.body.codeSecuriteC) {
             bcrypt.hash(req.body.codeSecurite, 10)
             .then(async hash => {
-                const parent = await new Parent({
-                    parentFirstName: req.body.parentFirstName,
-                    parentLastName: req.body.parentLastName,
-                    parentNumber: req.body.parentNumber,
-                    codeParental: req.body.codeParental,
-                    codeSecurite: hash,
-                })
-                await parent.save()
+                console.log(hash);
+                bcrypt.hash(req.body.codeParental, 10)
+                .then(async hash2 => {
+                    console.log(hash2);
+                    const parent = await new Parent({
+                        parentFirstName: req.body.parentFirstName,
+                        parentLastName: req.body.parentLastName,
+                        parentNumber: req.body.parentNumber,
+                        codeParental: hash2,
+                        codeSecurite: hash,
+                    })
+                    console.log(parent);
+                    await parent.save()
                     .then(() => res.status(201).json({
                         message: 'utilisateur enregistré !',
                         data: parent
                     }))
                     .catch(error => res.status(400).json({ error }));
-                console.log(parent);
+                })
+                .catch(error => res.status(500).json({ error }))
             })
             .catch(error => res.status(500).json({ error }))
         }
@@ -116,6 +122,7 @@ const updateCodeParental = (async (req,res) => {
         await Parent.findOne({ parentNumber : req.params.parentNumber })
             .then(
                 async user => {
+                    console.log();
                     const valid = await bcrypt.compare(req.body.parentCurrentCodeParental, user.codeParental)
                     if (!valid) {
                         return res.status(500).json({ message: 'mot de passe incorrect' })
