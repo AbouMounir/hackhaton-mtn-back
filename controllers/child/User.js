@@ -70,7 +70,7 @@ const confirmChildPassword = (async (req,res) => {
                     if (!user) {
                         return res.status(500).json({ message: "utilisateur n'existe pas" })
                     }
-                    const valid = await bcrypt.compare(req.body.childCurrentPassword, user.childPassword)
+                    const valid = await bcrypt.compare(req.body.codeSecurite, user.codeSecurite)
                     if (!valid) {
                         return res.status(500).json({ message: 'mot de passe incorrect' })
                     }
@@ -92,16 +92,16 @@ const updateChildPassword = (async (req,res) => {
                     if (!user) {
                         return res.status(500).json({ message: "utilisateur n'existe pas" })
                     }
-                    const valid = await bcrypt.compare(req.body.childCurrentPassword, user.childPassword)
+                    const valid = await bcrypt.compare(req.body.codeSecurite, user.codeSecurite)
                     if (!valid) {
                         return res.status(500).json({ message: 'mot de passe incorrect' })
                     }
-                    if (req.body.childnewPassword !== req.body.childnewPasswordC) {
+                    if (req.body.childnewPassword !== req.body.codeSecuriteC) {
                         return res.status(500).json({ message: 'entrez le même mot de passe' })
                     }
-                    await bcrypt.hash(req.body.childnewPassword, 10)
+                    await bcrypt.hash(req.body.codeSecurite, 10)
                         .then(hash_new => {
-                            user.childPassword = hash_new
+                            user.codeSecurite = hash_new
                             user.save();
                             res.send(user)
                         })

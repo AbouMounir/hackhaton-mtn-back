@@ -72,7 +72,7 @@ const confirmParentPassword = (async (req,res) => {
                     if (!user) {
                         return res.status(500).json({ message: "utilisateur n'existe pas" })
                     }
-                    const valid = await bcrypt.compare(req.body.childCurrentPassword, user.childPassword)
+                    const valid = await bcrypt.compare(req.body.codeSecurite, user.codeSecurite)
                     if (!valid) {
                         return res.status(500).json({ message: 'mot de passe incorrect' })
                     }
@@ -90,14 +90,14 @@ const updateParentPassword = (async (req,res) => {
         await Parent.findOne({ parentNumber : req.params.parentNumber })
             .then(
                 async user => {
-                    const valid = await bcrypt.compare(req.body.parentCurrentPassword, user.codeSecurite)
+                    const valid = await bcrypt.compare(req.body.codeSecurite, user.codeSecurite)
                     if (!valid) {
                         return res.status(500).json({ message: 'mot de passe incorrect' })
                     }
-                    if (req.body.parentnewPassword !== req.body.parentnewPasswordC) {
+                    if (req.body.codeSecurite !== req.body.codeSecuriteC) {
                         return res.status(500).json({ message: 'mot de passe non identique' })
                     }
-                    await bcrypt.hash(req.body.parentnewPassword, 10)
+                    await bcrypt.hash(req.body.codeSecurite, 10)
                         .then(hash_new => {
                             user.codeSecurite = hash_new
                             user.save();
