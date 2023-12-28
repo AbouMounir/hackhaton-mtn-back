@@ -21,7 +21,7 @@ routerParent.get('/codeparental', getCodeParentals)
 
 routerParent.post('/signup', signupParent)
 routerParent.post('/signin', signinParent)
-routerParent.post('/confirm/password', confirmParentPassword)
+routerParent.post('/confirm/password/:parentNumber', confirmParentPassword)
 
 routerParent.put('/addchildnumber/:parentNumber',addChildNumber)
 routerParent.put(('/update-password/:parentNumber'), updateParentPassword)
